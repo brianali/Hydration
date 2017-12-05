@@ -30,7 +30,10 @@
         <activity
             android:name=".MyActivities"
             android:parentActivityName=".MainActivity"></activity>
-        <activity android:name=".SetUpProfileActivity"></activity>
+        <activity android:name=".SetUpProfileActivity"
+            android:parentActivityName=".SignUpActivity">
+
+        </activity>
     </application>
 
 </manifest>

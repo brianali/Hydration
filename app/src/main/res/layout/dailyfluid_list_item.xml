@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <TextView
-            android:id="@+id/activity_name"
+            android:id="@+id/fluid_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/TextAppearance.AppCompat.Medium"/>
@@ -18,17 +18,17 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
-                android:id="@+id/activity_duration"
+                android:id="@+id/fluid_amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/min"/>
+                android:text="@string/oz"/>
         </LinearLayout>
     </LinearLayout>
     <Button
-        android:id="@+id/edit_activity_button"
+        android:id="@+id/edit_fluid_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"

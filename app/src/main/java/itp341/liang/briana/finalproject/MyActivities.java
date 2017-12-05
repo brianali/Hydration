@@ -1,7 +1,6 @@
 package itp341.liang.briana.finalproject;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,7 +14,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import itp341.liang.briana.finalproject.model.managers.ActivityManager;
-import itp341.liang.briana.finalproject.model.managers.StorageManager;
 import itp341.liang.briana.finalproject.model.objects.Activity;
 
 public class MyActivities extends AppCompatActivity {
@@ -142,7 +139,7 @@ public class MyActivities extends AppCompatActivity {
     private void showActivityDialog(String title, final int position) {
         activityDialog = new AlertDialog.Builder(this)
                 .setTitle(title)
-                .setView(R.layout.create_edit_activity)
+                .setView(R.layout.create_edit_activity_dialog)
                 .create();
         activityDialog.show();
 
@@ -209,6 +206,7 @@ public class MyActivities extends AppCompatActivity {
             Log.e("ERROR", "LOL");
             this.showErrorDialog("Invalid Form", "Please provide the proper fields");
             e.printStackTrace();
+            return;
         }
 
         if (name.equals("")) {

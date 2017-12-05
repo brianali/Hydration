@@ -138,7 +138,7 @@ public class ActiveActivityFragment extends Fragment {
     private void showActivityDialog(String title, final int position) {
         activityDialog = new AlertDialog.Builder(getContext())
                 .setTitle(EDIT_TITLE)
-                .setView(R.layout.create_edit_activity)
+                .setView(R.layout.create_edit_activity_dialog)
                 .create();
         activityDialog.show();
 
@@ -197,6 +197,7 @@ public class ActiveActivityFragment extends Fragment {
             Log.e("ERROR", "LOL");
             this.showErrorDialog("Invalid Form", "Please provide the proper fields");
             e.printStackTrace();
+            return;
         }
 
         if (name.equals("")) {

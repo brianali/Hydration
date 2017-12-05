@@ -5,55 +5,47 @@
     android:padding="@dimen/medium_spacing"
     android:layout_gravity="center">
     <TextView
-        android:id="@+id/nameOfActivity"
+        android:id="@+id/nameOffluid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/activity_name"
-        android:text="@string/activity_name"
+        android:contentDescription="@string/fluid_name"
+        android:text="@string/fluid_name"
         android:gravity="center"/>
     <EditText
-        android:id="@+id/activity_name"
+        android:id="@+id/fluid_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textAlignment="center"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/how_long"
-        android:text="@string/how_long"
+        android:contentDescription="@string/fluid_amount"
+        android:text="@string/fluid_amount"
         android:gravity="center"/>
     <EditText
-        android:id="@+id/how_long_field"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <TextView
+        android:id="@+id/water_amount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/added_water_intake"
-        android:text="@string/added_water_intake"
-        android:gravity="center"/>
-    <EditText
-        android:id="@+id/added_water_intake_field"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:textAlignment="center"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="end">
         <Button
-            android:id="@+id/delete_activity_btn"
+            android:id="@+id/delete_fluid_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/delete"
             android:background="@android:color/transparent"/>
         <Button
-            android:id="@+id/create_edit_activity_btn"
+            android:id="@+id/create_edit_fluid_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/create"
+            android:text="@string/add"
             android:background="@android:color/transparent"/>
         <Button
-            android:id="@+id/create_edit_activity_cancel_btn"
+            android:id="@+id/create_edit_fluid_cancel_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/cancel"

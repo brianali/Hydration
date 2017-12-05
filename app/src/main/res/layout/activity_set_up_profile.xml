@@ -36,12 +36,12 @@
                 android:layout_height="wrap_content"
                 android:text="@string/username_text"
                 android:gravity="center_vertical"
-                style="@style/Base.TextAppearance.AppCompat.Large"/>
+                style="@style/Base.TextAppearance.AppCompat.Medium"/>
             <TextView
                 android:id="@+id/username_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/Base.TextAppearance.AppCompat.Large"/>
+                style="@style/Base.TextAppearance.AppCompat.Medium"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"

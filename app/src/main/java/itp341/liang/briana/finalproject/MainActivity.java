@@ -12,14 +12,22 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.ArrayList;
+
+import itp341.liang.briana.finalproject.model.managers.ActivityManager;
 import itp341.liang.briana.finalproject.model.managers.StorageManager;
+import itp341.liang.briana.finalproject.model.managers.UserManager;
+import itp341.liang.briana.finalproject.model.objects.UserInfo;
 
 public class MainActivity extends AppCompatActivity {
     private MyPagerAdapter viewPagerAdapter;
 
     private ViewPager mViewPager;
     private TabLayout tabLayout;
-
+    private FirebaseAuth auth;
+    private String username;
     // Tab titles
     private static String[] tabs = { "Daily Fluids", "Daily Activities"};
     @Override
@@ -29,10 +37,16 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         StorageManager.getDefaultManagerWithContext(getApplicationContext());
+        auth = FirebaseAuth.getInstance();
+        username = auth.getCurrentUser().getEmail();
         Intent data = getIntent();
         if (data!=null){
-            String weight = data.getStringExtra(SetUpProfileActivity.WEIGHT);
-            String waterGoal = data.getStringExtra(SetUpProfileActivity.WATER_GOAL);
+            UserInfo user = (UserInfo) data.getSerializableExtra(SetUpProfileActivity.WEIGHT);
+            UserManager.getDefaultManager().setUserInfo(user);
+            ArrayList<UserInfo> all = UserManager.getDefaultManager().getAllUserInfos();
+            int x= 5;
+//            String weight = data.getStringExtra(SetUpProfileActivity.WEIGHT);
+//            String waterGoal = data.getStringExtra(SetUpProfileActivity.WATER_GOAL);
         }
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
         viewPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());

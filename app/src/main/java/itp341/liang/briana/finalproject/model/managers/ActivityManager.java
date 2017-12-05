@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import itp341.liang.briana.finalproject.MyActivities;
 import itp341.liang.briana.finalproject.model.objects.Activity;
 
 /**
@@ -14,8 +15,8 @@ import itp341.liang.briana.finalproject.model.objects.Activity;
  */
 
 public class ActivityManager {
-    public static final String ACTIVITY_GROUP_IDENTIFIER = "MyActivities";
-    public static final String DAILY_ACTIVITY_GROUP_IDENTIFIER = "DailyActivities";
+    private final static String ACTIVITY_GROUP_IDENTIFIER = "MyActivities";
+    private final static String DAILY_ACTIVITY_GROUP_IDENTIFIER = "DailyActivities";
     private static ActivityManager defaultManager = new ActivityManager();
 
 
@@ -33,6 +34,7 @@ public class ActivityManager {
     private ActivityManager(){
 
     }
+
     /*
      * setActivity method, takes in a Activity object
      * */
@@ -141,6 +143,22 @@ public class ActivityManager {
         }
 
         return activities;
+    }
+
+    /**
+     * Get the total added fluid intake from all active activities
+     * @return a double of total daily added fluid intake
+     */
+    public @NonNull double getTotalFluidAdded() {
+        ArrayList<Serializable> serials = storageManager.getObjectsWithPrefix(DAILY_ACTIVITY_GROUP_IDENTIFIER);
+        double total=0;
+        for (Serializable obj : serials) {
+            if (obj != null) {
+                total+= ((Activity)obj).getAddedWater();
+            }
+        }
+
+        return total;
     }
 
     /*
