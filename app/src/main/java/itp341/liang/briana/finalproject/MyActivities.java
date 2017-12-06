@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import java.util.ArrayList;
@@ -28,9 +29,9 @@ import itp341.liang.briana.finalproject.model.managers.ActivityManager;
 import itp341.liang.briana.finalproject.model.objects.Activity;
 
 public class MyActivities extends AppCompatActivity {
-    private static final String CREATE_TITLE = "Create New Activity" ;
-    private static final String EDIT_TITLE = "Edit Activity" ;
-    public static final String ADD_DAILY_ACTIVITY = "Add Daily Activity";
+    private static final String CREATE_TITLE = "Create New Exercise" ;
+    private static final String EDIT_TITLE = "Edit Exercise" ;
+    public static final String ADD_DAILY_ACTIVITY = "Add Daily Exercise";
 
     private ListView myActivitiesListView;
     private Button createActivityBtn;
@@ -98,6 +99,8 @@ public class MyActivities extends AppCompatActivity {
             // into the template view.
             viewHolder.activityName.setText(activity.getName());
             viewHolder.duration.setText(Integer.toString(activity.getDuration()));
+            viewHolder.amount.setText(Double.toString(activity.getAddedWater()));
+
             viewHolder.editBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -111,6 +114,8 @@ public class MyActivities extends AppCompatActivity {
                     Intent i = new Intent();
                     i.putExtra(ADD_DAILY_ACTIVITY, activity);
                     setResult(android.app.Activity.RESULT_OK, i);
+                    String displayString = "Added " + Double.toString(activity.getAddedWater()) + " oz to daily target goal";
+                    Toast.makeText(getContext(), displayString, Toast.LENGTH_SHORT).show();
                     finish();
                 }
             });
@@ -120,12 +125,13 @@ public class MyActivities extends AppCompatActivity {
         // View lookup cache that populates the listview
         public class ViewHolder {
             TextView activityName;
-            TextView duration;
+            TextView duration, amount;
             Button editBtn, addBtn;
             public ViewHolder(View v) {
                 activityName = v.findViewById(R.id.activity_name);
                 duration = v.findViewById(R.id.activity_duration);
                 editBtn = v.findViewById(R.id.edit_activity_button);
+                amount = v.findViewById(R.id.activity_amount);
                 addBtn = v.findViewById(R.id.add_activity_button);
             }
         }
@@ -188,7 +194,11 @@ public class MyActivities extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Activity editedActivity = myActivitiesList.get(position);
+                ArrayList<Activity> all = ActivityManager.getDefaultManager().getAllActivities();
+
                 ActivityManager.getDefaultManager().removeActivity(editedActivity);
+                ArrayList<Activity> all2 = ActivityManager.getDefaultManager().getAllActivities();
+
                 myActivitiesList.remove(editedActivity);
                 activitiesAdapter.notifyDataSetChanged();
                 activityDialog.dismiss();

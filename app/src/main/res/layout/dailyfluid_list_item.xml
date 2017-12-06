@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/medium_spacing">
+    android:padding="@dimen/smallest_spacing">
     <LinearLayout
         android:id="@+id/layout"
         android:layout_width="match_parent"
@@ -11,8 +11,7 @@
         <TextView
             android:id="@+id/fluid_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/TextAppearance.AppCompat.Medium"/>
+            android:layout_height="wrap_content"/>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -20,18 +19,26 @@
             <TextView
                 android:id="@+id/fluid_amount"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.AppCompat.Small"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_marginStart="@dimen/small_spacing"
                 android:layout_height="wrap_content"
+                style="@style/TextAppearance.AppCompat.Small"
                 android:text="@string/oz"/>
+            <TextView
+                android:id="@+id/fluid_time"
+                android:layout_width="match_parent"
+                android:layout_marginStart="@dimen/medium_spacing"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.AppCompat.Small"/>
         </LinearLayout>
     </LinearLayout>
     <Button
         android:id="@+id/edit_fluid_button"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/button_size"
         android:layout_alignParentEnd="true"
         android:text="@string/edit"
         android:background="@android:color/transparent"

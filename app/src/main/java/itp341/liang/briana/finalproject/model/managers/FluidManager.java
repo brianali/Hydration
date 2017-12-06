@@ -76,9 +76,9 @@ public class FluidManager {
     }
     
     /**
-     * Purge all saved activities.
+     * Purge all saved fluids.
      */
-    public void removeAllActivities() {
+    public void removeAllDailyFluids() {
         this.storageManager.removeObjectsWithPrefix(FLUID_GROUP_IDENTIFIER);
     }
 

@@ -25,15 +25,14 @@
         <activity android:name=".SignUpActivity" />
         <activity
             android:name=".SettingsActivity"
-            android:parentActivityName=".MainActivity"></activity>
-        <activity android:name=".ResetPasswordActivity" />
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".MyActivities"
-            android:parentActivityName=".MainActivity"></activity>
-        <activity android:name=".SetUpProfileActivity"
-            android:parentActivityName=".SignUpActivity">
-
-        </activity>
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".SetUpProfileActivity"
+            android:parentActivityName=".SignUpActivity"></activity>
+        <activity android:name=".ResetPasswordActivity"></activity>
     </application>
 
 </manifest>

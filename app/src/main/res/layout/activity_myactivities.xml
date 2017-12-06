@@ -20,6 +20,21 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/all_exercises_label"
+        android:layout_marginTop="@dimen/medium_spacing"
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:textAlignment="center"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:text="@string/all_exercises_label_note"
+        style="@style/Base.TextAppearance.AppCompat.Small"
+        android:textAlignment="center"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

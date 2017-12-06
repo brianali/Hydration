@@ -5,9 +5,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -22,12 +25,20 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import itp341.liang.briana.finalproject.model.managers.ActivityManager;
@@ -46,9 +57,9 @@ public class OverviewFragment extends Fragment {
     private ProgressBar dailyProgress;
     private TextView currOz, totalOz;
     private TextView morningOz, afternoonOz, eveningOz;
+    private double mornAmt, afterAmt, eveningAmt;
     private FloatingActionButton addDrinkBtn;
     private ListView fluidListView; 
-    private PieChart fluidPieChart;
     private ArrayList<Fluid> fluidsList;
     private FluidAdapter fluidAdapter;
     private android.app.AlertDialog fluidDialog;
@@ -57,6 +68,7 @@ public class OverviewFragment extends Fragment {
     EditText fluidName, fluidAmount;
     Button addBtn, delBtn, cancelBtn;
     boolean isCreate = false;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,7 +83,7 @@ public class OverviewFragment extends Fragment {
         eveningOz = view.findViewById(R.id.evening_ounces_text);
         addDrinkBtn = view.findViewById(R.id.add_drink_btn);
         fluidListView = view.findViewById(R.id.fluid_list_view);
-        fluidPieChart = view.findViewById(R.id.total_pie_chart);
+
 
         fluidsList = FluidManager.getDefaultManager().getAllFluids();
         fluidAdapter = new FluidAdapter(getContext(), R.layout.dailyfluid_list_item, fluidsList);
@@ -92,23 +104,29 @@ public class OverviewFragment extends Fragment {
 
     // set the daily overview
     private void setOverviewData(){
-        checkReset();
         setTotalOz();
         currOz.setText(getFluidIntake());
         dailyProgress.setMax((int)user.getDailyWaterGoal());
         dailyProgress.setProgress((int)Double.parseDouble(getFluidIntake()));
-        morningOz.setText(Double.toString(FluidManager.getDefaultManager().getTotalMorningFluids()));
-        afternoonOz.setText(Double.toString(FluidManager.getDefaultManager().getTotalAfternoonFluids()));
-        eveningOz.setText(Double.toString(FluidManager.getDefaultManager().getTotalEveningFluids()));
-    }
-    private void checkReset(){
-        Calendar curr = Calendar.getInstance();
+        mornAmt = FluidManager.getDefaultManager().getTotalMorningFluids();
+        afterAmt = FluidManager.getDefaultManager().getTotalAfternoonFluids();
+        eveningAmt = FluidManager.getDefaultManager().getTotalEveningFluids();
+        morningOz.setText(Double.toString(mornAmt));
+        afternoonOz.setText(Double.toString(afterAmt));
+        eveningOz.setText(Double.toString(eveningAmt));
     }
     private void setTotalOz(){
         double total = user.getDailyWaterGoal();
-        ActivityManager.getDefaultManager().getActiveActivities();
-        totalOz.setText(Double.toString(total));
+        double added = ActivityManager.getDefaultManager().getTotalFluidAdded();
+        totalOz.setText(Double.toString(total+added));
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setTotalOz();
+    }
+
     private String getFluidIntake(){
         double total = 0;
         for (Fluid fluid: fluidsList){
@@ -144,6 +162,11 @@ public class OverviewFragment extends Fragment {
             // into the template view.
             viewHolder.fluidType.setText(fluid.getName());
             viewHolder.amount.setText(Double.toString(fluid.getAmount()));
+            java.text.DateFormat df = new SimpleDateFormat("h:mm a");
+            Calendar time = fluid.getTimestamp();
+            Date date = new Date(0, 0, 0, time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE));
+            String timeText = df.format(date);
+            viewHolder.time.setText(timeText);
             viewHolder.editBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -157,11 +180,12 @@ public class OverviewFragment extends Fragment {
         // View lookup cache that populates the listview
         public class ViewHolder {
             TextView fluidType;
-            TextView amount;
+            TextView amount, time;
             Button editBtn;
             public ViewHolder(View v) {
                 fluidType = v.findViewById(R.id.fluid_name);
                 amount = v.findViewById(R.id.fluid_amount);
+                time = v.findViewById(R.id.fluid_time);
                 editBtn = v.findViewById(R.id.edit_fluid_button);
             }
         }
@@ -233,8 +257,7 @@ public class OverviewFragment extends Fragment {
         try{
             amt = Double.parseDouble(amount);
         }catch (NumberFormatException e){
-            Log.e("ERROR", "LOL");
-            this.showErrorDialog("Invalid Form", "Please provide the proper fields");
+            this.showErrorDialog("Invalid Form", "Please provide a valid amount for the Fluid");
             e.printStackTrace();
             return;
         }

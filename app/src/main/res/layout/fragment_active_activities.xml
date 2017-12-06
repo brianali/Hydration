@@ -5,6 +5,12 @@
     android:padding="@dimen/fab_margin"
     android:orientation="vertical"
     tools:context="itp341.liang.briana.finalproject.ActiveActivityFragment">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/medium_spacing"
+        style="@style/Base.TextAppearance.AppCompat.Medium"
+        android:text="@string/daily_activity_label"/>
     <ListView
         android:id="@+id/todays_activity_list_view"
         android:layout_width="match_parent"

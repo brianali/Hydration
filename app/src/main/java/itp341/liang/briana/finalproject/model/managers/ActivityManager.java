@@ -118,10 +118,10 @@ public class ActivityManager {
     }
 
     /**
-     * Purge all saved activities.
+     * Purge all saved daily activities.
      */
-    public void removeAllActivities() {
-        this.storageManager.removeObjectsWithPrefix(ACTIVITY_GROUP_IDENTIFIER);
+    public void removeAllDailyActivities() {
+        this.storageManager.removeObjectsWithPrefix(DAILY_ACTIVITY_GROUP_IDENTIFIER);
     }
 
     /*

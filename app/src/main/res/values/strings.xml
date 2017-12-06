@@ -9,7 +9,9 @@
     <string name="send_password_reset_email">Send Password reset email</string>
     <string name="remove_user">Remove user</string>
     <string name="new_pass">New Password</string>
-    <string name="provide_new_pass">Provide New Password</string>
+    <string name="provide_old_pass">Enter Old Password</string>
+    <string name="provide_new_pass">Enter New Password</string>
+    <string name="provide_pass">Enter Password</string>
     <string name="title_activity_profile">Firebase</string>
     <string name="title_activity_login">Sign in</string>
     <string name="hint_email">Email</string>
@@ -19,16 +21,16 @@
     <string name="btn_link_to_register">Register for an account</string>
     <string name="btn_link_to_login">Already registered. Login In!</string>
     <string name="title_activity_reset_password">ResetPasswordActivity</string>
-    <string name="btn_forgot_password">Forgot your password?</string>
-    <string name="btn_reset_password">Reset Password</string>
+    <string name="btn_forgot_password">Change Password</string>
+    <string name="btn_reset_password">Change Password</string>
     <string name="btn_back"><![CDATA[<< Back]]></string>
     <string name="hint_new_email">New Email</string>
     <string name="btn_change">Change</string>
     <string name="btn_send">Send</string>
     <string name="btn_remove">Remove</string>
     <string name="btn_sign_out">Sign Out</string>
-    <string name="lbl_forgot_password">Forgot password?</string>
-    <string name="forgot_password_msg">Please provide your registered email to receive password reset instructions.</string>
+    <string name="lbl_forgot_password">Change password?</string>
+    <string name="forgot_password_msg">Please provide your registered email to change your password</string>
     <string name="title_activity_login_activitys">Sign in</string>
 
     <!-- Strings related to login -->
@@ -44,7 +46,7 @@
     </string>
     <string name="title_activity_main">Hydration</string>
     <string name="title_settings">Settings</string>
-    <string name="title_my_activities">My Activities</string>
+    <string name="title_my_activities">All Exercises</string>
     <string name="title_setup">Set Up Profile</string>
 
 
@@ -56,14 +58,21 @@
     <string name="evening">Evening</string>
     <string name="target_goal">Target Goal</string>
     <string name="oz">oz</string>
-
-    <string name="add_activity">Add Activity</string>
-    <string name="create_new_activity">Create Activity</string>
-
+    <string name="oz_added">oz added</string>
+    <string name="fluid_name">Type of Fluid</string>
+    <string name="fluid_amount">Amount (oz)</string>
+    <string name="fluid_list_label">Daily Fluids</string>
+    <string name="add_fluid">Add Fluid</string>
+    <!--Strings related to Activity views-->
+    <string name="add_activity">Add Exercise</string>
+    <string name="create_new_activity">Create New Exercise</string>
+    <string name="daily_activity_label">Today\'s exercises that contribute to fluid target goal</string>
+    <string name="all_exercises_label_note">Press "ADD" on an existing exercise to add an exercise for today or create a new exercise</string>
+    <string name="all_exercises_label">List of all exercises</string>
     <!--Strings related to create activity dialog-->
-    <string name="activity_name">Name of Activity</string>
+    <string name="activity_name">Name of Exercise</string>
     <string name="how_long">How Long (minutes)</string>
-    <string name="added_water_intake">Added Water Intake (oz)</string>
+    <string name="added_water_intake">Added Fluid Intake (oz)</string>
     <string name="create">Create</string>
     <string name="cancel">Cancel</string>
     <string name="edit">Edit</string>
@@ -72,15 +81,17 @@
     <string name="delete">Delete</string>
     <string name="min">min</string>
 
+
+    <!--Strings related to Settings -->
     <string name="facebook_app_id">567593810238656</string>
     <string name="fb_login_protocol_scheme">fb567593810238656</string>
-    <string name="water_goal_text">Daily Water Goal (oz):</string>
+    <string name="water_goal_text">Target Fluid Goal (oz):</string>
     <string name="weight_text">Weight (lbs):</string>
     <string name="username_text">Username </string>
     <string name="finish">Finish</string>
-
-    <string name="fluid_name">Type of Fluid</string>
-    <string name="fluid_amount">Amount (oz)</string>
-
     <string name="settings_field">Username</string>
+    <string name="okay">ok</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="pie_chart_label">Fluid Percent Break Down Graph</string>
 </resources>

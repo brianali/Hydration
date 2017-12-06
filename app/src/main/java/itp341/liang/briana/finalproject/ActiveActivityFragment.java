@@ -73,9 +73,9 @@ public class ActiveActivityFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == android.app.Activity.RESULT_OK && data!=null){
             Activity dailyActivity = (Activity) data.getSerializableExtra(MyActivities.ADD_DAILY_ACTIVITY);
-            Activity newDailyActivity = new Activity(dailyActivity.getName(), dailyActivity.getDuration(), dailyActivity.getAddedWater());
-            ActivityManager.getDefaultManager().setDailyActivity(newDailyActivity);
-            activeActivitiesList.add(newDailyActivity);
+//            Activity newDailyActivity = new Activity(dailyActivity.getName(), dailyActivity.getDuration(), dailyActivity.getAddedWater());
+            ActivityManager.getDefaultManager().setDailyActivity(dailyActivity);
+            activeActivitiesList.add(dailyActivity);
             activitiesAdapter.notifyDataSetChanged();
         }
     }
@@ -107,6 +107,7 @@ public class ActiveActivityFragment extends Fragment {
             // into the template view.
             viewHolder.activityName.setText(activity.getName());
             viewHolder.duration.setText(Integer.toString(activity.getDuration()));
+            viewHolder.amount.setText(Double.toString(activity.getAddedWater()));
             viewHolder.editBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -120,11 +121,12 @@ public class ActiveActivityFragment extends Fragment {
         // View lookup cache that populates the listview
         public class ViewHolder {
             TextView activityName;
-            TextView duration;
+            TextView duration, amount;
             Button editBtn;
             public ViewHolder(View v) {
                 activityName = v.findViewById(R.id.activity_name);
                 duration = v.findViewById(R.id.activity_duration);
+                amount = v.findViewById(R.id.activity_amount);
                 editBtn = v.findViewById(R.id.edit_activity_button);
             }
         }
@@ -181,6 +183,7 @@ public class ActiveActivityFragment extends Fragment {
                 Activity editedActivity = activeActivitiesList.get(position);
                 ActivityManager.getDefaultManager().removeDailyActivity(editedActivity);
                 activeActivitiesList.remove(editedActivity);
+                ArrayList<Activity> all = ActivityManager.getDefaultManager().getActiveActivities();
                 activitiesAdapter.notifyDataSetChanged();
                 activityDialog.dismiss();
             }
@@ -192,10 +195,16 @@ public class ActiveActivityFragment extends Fragment {
         double water = 0;
         try{
             dur = Integer.parseInt(duration);
+        }catch (NumberFormatException e){
+            this.showErrorDialog("Invalid Value", "Please provide a whole number value (mins)");
+            e.printStackTrace();
+            return;
+        }
+        try{
             water = Double.parseDouble(addedWater);
         }catch (NumberFormatException e){
             Log.e("ERROR", "LOL");
-            this.showErrorDialog("Invalid Form", "Please provide the proper fields");
+            this.showErrorDialog("Invalid Value", "Please provide a proper number value (oz)");
             e.printStackTrace();
             return;
         }

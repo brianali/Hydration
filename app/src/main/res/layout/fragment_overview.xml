@@ -40,6 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/TextAppearance.AppCompat.Medium"
+                android:layout_marginLeft="@dimen/small_spacing"
                 android:text="@string/oz"/>
         </LinearLayout>
     </LinearLayout>
@@ -117,36 +118,38 @@
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
             android:gravity="center"
-            android:text="@string/morning"/>
+            android:text="@string/morning"
+            style="@style/TextAppearance.AppCompat.Medium"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
             android:gravity="center"
-            android:text="@string/afternoon"/>
+            android:text="@string/afternoon"
+            style="@style/TextAppearance.AppCompat.Medium"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
             android:gravity="center"
-            android:text="@string/evening"/>
+            android:text="@string/evening"
+            style="@style/TextAppearance.AppCompat.Medium"/>
     </GridLayout>
-
+    <TextView
+        android:id="@+id/fluid_list_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/grid_layout"
+        android:layout_marginTop="@dimen/medium_spacing"
+        android:text="@string/fluid_list_label"
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:textAlignment="center"/>
     <ListView
         android:id="@+id/fluid_list_view"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_below="@id/grid_layout">
+        android:layout_below="@id/fluid_list_label">
     </ListView>
-
-    <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/total_pie_chart"
-        android:layout_gravity="center"
-        android:layout_width="350dp"
-        android:layout_height="300dp"
-        android:layout_below="@id/fluid_list_view"/>
-
-
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_drink_btn"
@@ -155,4 +158,10 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         app:srcCompat="@drawable/ic_local_drink_black_24dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/add_drink_btn"
+        android:layout_centerHorizontal="true"
+        android:text="@string/add_fluid"/>
 </RelativeLayout>

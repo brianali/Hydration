@@ -14,11 +14,16 @@ import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import itp341.liang.briana.finalproject.model.managers.ActivityManager;
+import itp341.liang.briana.finalproject.model.managers.FluidManager;
 import itp341.liang.briana.finalproject.model.managers.StorageManager;
 import itp341.liang.briana.finalproject.model.managers.UserManager;
+import itp341.liang.briana.finalproject.model.objects.Activity;
+import itp341.liang.briana.finalproject.model.objects.Fluid;
 import itp341.liang.briana.finalproject.model.objects.UserInfo;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private String username;
     // Tab titles
-    private static String[] tabs = { "Daily Fluids", "Daily Activities"};
+    private static String[] tabs = { "Daily Fluids", "BreakDown Graph", "Daily Exercises"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
 //            String weight = data.getStringExtra(SetUpProfileActivity.WEIGHT);
 //            String waterGoal = data.getStringExtra(SetUpProfileActivity.WATER_GOAL);
         }
+        resetData();
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
         viewPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(viewPagerAdapter);
@@ -56,7 +62,19 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
     }
-
+    public void resetData(){
+        Calendar curr = Calendar.getInstance();
+        int currDay = curr.get(Calendar.DAY_OF_YEAR);
+        ArrayList<Activity> activities = ActivityManager.getDefaultManager().getActiveActivities();
+        ArrayList<Fluid> fluids = FluidManager.getDefaultManager().getAllFluids();
+        if (!fluids.isEmpty()){
+            int lastUsedDay = fluids.get(0).getTimestamp().get(Calendar.DAY_OF_YEAR);
+            if (lastUsedDay <currDay){
+                ActivityManager.getDefaultManager().removeAllDailyActivities();
+                FluidManager.getDefaultManager().removeAllDailyFluids();
+            }
+        }
+    }
     public void onDestroy() {
         super.onDestroy();
 
@@ -64,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public class MyPagerAdapter extends FragmentStatePagerAdapter {
-        private int NUM_TABS = 2;
+        private int NUM_TABS = 3;
         private FragmentManager fm;
 
         public MyPagerAdapter(FragmentManager fragmentManager) {
@@ -84,6 +102,8 @@ public class MainActivity extends AppCompatActivity {
             switch (position) {
                 case 0:
                     return new OverviewFragment();
+                case 2:
+                    return new PieChartFragment();
                 case 1:
                     return new ActiveActivityFragment();
                 default:
@@ -97,8 +117,10 @@ public class MainActivity extends AppCompatActivity {
             switch (position) {
                 case 0:
                     return tabs[0];
-                case 1:
+                case 2:
                     return tabs[1];
+                case 1:
+                    return tabs[2];
                 default:
                     return null;
             }

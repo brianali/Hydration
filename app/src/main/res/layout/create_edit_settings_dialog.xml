@@ -25,7 +25,7 @@
             android:id="@+id/create_edit_settings_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/save"
+            android:text="@string/okay"
             android:background="@android:color/transparent"/>
         <Button
             android:id="@+id/create_edit_settings_cancel_btn"

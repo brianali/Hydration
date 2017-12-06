@@ -6,8 +6,8 @@ package itp341.liang.briana.finalproject.model.objects;
 
 public class UserInfo extends NamedObject {
     private static final long serialVersionUID = 7L;
-    private double weight;
-    private double dailyWaterGoal;
+    private double weight=0;
+    private double dailyWaterGoal=0;
 
     public UserInfo(String username, double weight, double dailyWaterGoal) {
         super(username);

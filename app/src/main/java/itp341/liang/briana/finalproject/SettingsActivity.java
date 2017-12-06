@@ -51,10 +51,10 @@ public class SettingsActivity extends AppCompatActivity {
     private Button saveBtn, cancelBtn;
 
 
-    private String [] titles = {"Change Username", "Change Weight", "Change Daily Water Goal"};
-    private String [] desc = {"Set New Username", "Set New Weight (lbs)", "Set New Daily Water Goal (oz)"};
+    private String [] titles = {"Change Email", "Change Weight", "Change Target Fluid Goal", "Change Password"};
+    private String [] desc = {"Set New Email", "Set New Weight (lbs)", "Set New Target Fluid Goal (oz)", "Set New Password"};
     private ArrayList<SettingsData> settingsList;
-    private String [] textList = {"Username", "Weight", "Daily Water Goal", "Sign Out"};
+    private String [] textList = {"Email", "Weight", "Daily Fluid Goal", "Change Password", "Sign Out"};
     private String[] fieldList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +92,10 @@ public class SettingsActivity extends AppCompatActivity {
                     case 2: // daily water goal:
                         showSettingsDialog(titles[2], desc[2], i);
                         break;
-                    case 3: // logout:
+                    case 3: // change password:
+                        changePassword();
+                        break;
+                    case 4: // logout:
                         logOut();
                         break;
                 }
@@ -140,7 +143,70 @@ public class SettingsActivity extends AppCompatActivity {
             }
         }
     }
+    private EditText oPField, nPassField;
+    private String nPass, oP;
+    private void changePassword(){
+        final AlertDialog passwordDialog = new AlertDialog.Builder(this)
+                .setTitle("Change Password")
+                .setView(R.layout.change_password_dialog)
+                .create();
+        passwordDialog.show();
+        oPField = passwordDialog.findViewById(R.id.provide_old_pass_field);
+        nPassField = passwordDialog.findViewById(R.id.provide_new_pass_field);
+        Button changeBtn = passwordDialog.findViewById(R.id.change_pass_btn);
+        Button cancelBtn = passwordDialog.findViewById(R.id.change_pass_cancel_btn);
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                passwordDialog.dismiss();
+            }
+        });
+        changeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                oP = oPField.getText().toString();
+                nPass = nPassField.getText().toString();
+                if (oP.trim().equals("") || nPass.trim().equals("")){
+                    // Don't accept blank names, show an error
+                    showErrorDialog("Invalid Password", "Please fill out the fields");
+                    return;
+                }
+                else if (oP.trim().length() <6 || nPass.trim().length() <6){
+                    showErrorDialog("Invalid Password", "Minimum password length is 6");
+                    return;
+                } else {
+                    updatePassword();
+                    passwordDialog.dismiss();
+                }
+            }
+        });
+    }
+    private void updatePassword(){
 
+        final String email = currUser.getEmail();
+        AuthCredential credential = EmailAuthProvider.getCredential(email,oP);
+
+        currUser.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    currUser.updatePassword(nPass).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(getApplicationContext(), "Password has been updated. Please sign in with new password.", Toast.LENGTH_LONG).show();
+
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Failed to update password!", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                }else {
+                    Toast.makeText(getApplicationContext(), "Failed to update password!", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
     /**
      * edit existing settings dialog
      * @param title create or edit settings item title
@@ -172,6 +238,7 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 settingsDialog.dismiss();
                 didEditField(editField.getText().toString(), position);
+
             }
         });
 
@@ -187,7 +254,7 @@ public class SettingsActivity extends AppCompatActivity {
     boolean isChanged = true;
     private String newEmail, oldPass;
     private void didEditField(String editField, final int position) {
-        // if username, set username
+        // if username, change email
         if (position ==0){
             if (editField.equals("")) {
                 // Don't accept blank names, show an error
@@ -195,23 +262,8 @@ public class SettingsActivity extends AppCompatActivity {
                 return;
             }
             newEmail = editField.trim();
-//            if (currUser != null && !newEmail.equals("")) {
-//                currUser.updateEmail(newEmail)
-//                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<Void> task) {
-//                                if (task.isSuccessful()) {
-//                                    Toast.makeText(getApplicationContext(), "Email address is updated. Please sign in with new email!", Toast.LENGTH_LONG).show();
-//                                    logOut();
-//                                } else {
-//                                    Toast.makeText(getApplicationContext(), "Failed to update email!", Toast.LENGTH_LONG).show();
-//                                    logOut();
-//                                }
-//                            }
-//                        });
-//            }
             final AlertDialog passwordDialog = new AlertDialog.Builder(this)
-                    .setTitle("Enter old password")
+                    .setTitle("Confirm Email Change")
                     .setView(R.layout.change_email_dialog)
                     .create();
             passwordDialog.show();
@@ -239,12 +291,6 @@ public class SettingsActivity extends AppCompatActivity {
                         isChanged = false;
                         return;
                     } else {
-//                        auth.signInWithEmailAndPassword(currUser.getEmail(), newPass)
-//                                .then(function(user) {
-//                            user.updateEmail('newyou@domain.com')
-//                        })
-
-
                         updateEmail(position);
                         passwordDialog.dismiss();
                     }
@@ -331,7 +377,7 @@ public class SettingsActivity extends AppCompatActivity {
     private void setUpSettingsList(){
         settingsList = new ArrayList<>();
         fieldList = new String[]{username, Double.toString(user.getWeight()) + " lbs",
-                Double.toString(user.getDailyWaterGoal()) + " oz", ""};
+                Double.toString(user.getDailyWaterGoal()) + " oz", "", ""};
         for (int i = 0; i<textList.length; i++){
             settingsList.add(new SettingsData(textList[i], fieldList[i]));
         }
