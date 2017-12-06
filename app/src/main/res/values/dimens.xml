@@ -8,4 +8,5 @@
     <dimen name="medium_spacing">8dp</dimen>
     <dimen name="image_size">70dp</dimen>
     <dimen name="set_up_text_width">140dp</dimen>
+    <dimen name="small_spacing">4dp</dimen>
 </resources>

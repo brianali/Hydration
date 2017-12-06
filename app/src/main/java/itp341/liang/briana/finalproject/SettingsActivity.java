@@ -25,10 +25,11 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -182,8 +183,10 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
     }
-
-    private void didEditField(String editField, int position) {
+    private EditText oldPassField;
+    boolean isChanged = true;
+    private String newEmail, oldPass;
+    private void didEditField(String editField, final int position) {
         // if username, set username
         if (position ==0){
             if (editField.equals("")) {
@@ -191,23 +194,62 @@ public class SettingsActivity extends AppCompatActivity {
                 this.showErrorDialog("Invalid Name", "Please provide a proper name");
                 return;
             }
-            String newEmail = editField.trim();
-            if (currUser != null && !newEmail.equals("")) {
-                currUser.updateEmail(newEmail)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(getApplicationContext(), "Email address is updated. Please sign in with new email!", Toast.LENGTH_LONG).show();
-                                    logOut();
-                                } else {
-                                    Toast.makeText(getApplicationContext(), "Failed to update email!", Toast.LENGTH_LONG).show();
-                                    logOut();
-                                }
-                            }
-                        });
-            }
-            user.setName(newEmail);
+            newEmail = editField.trim();
+//            if (currUser != null && !newEmail.equals("")) {
+//                currUser.updateEmail(newEmail)
+//                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<Void> task) {
+//                                if (task.isSuccessful()) {
+//                                    Toast.makeText(getApplicationContext(), "Email address is updated. Please sign in with new email!", Toast.LENGTH_LONG).show();
+//                                    logOut();
+//                                } else {
+//                                    Toast.makeText(getApplicationContext(), "Failed to update email!", Toast.LENGTH_LONG).show();
+//                                    logOut();
+//                                }
+//                            }
+//                        });
+//            }
+            final AlertDialog passwordDialog = new AlertDialog.Builder(this)
+                    .setTitle("Enter old password")
+                    .setView(R.layout.change_email_dialog)
+                    .create();
+            passwordDialog.show();
+            oldPassField = passwordDialog.findViewById(R.id.provide_new_pass_field);
+            Button changeBtn = passwordDialog.findViewById(R.id.change_pass_btn);
+            Button cancelBtn = passwordDialog.findViewById(R.id.change_pass_cancel_btn);
+            cancelBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    passwordDialog.dismiss();
+                }
+            });
+            changeBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    oldPass = oldPassField.getText().toString();
+                    if (oldPass.trim().equals("")){
+                        // Don't accept blank names, show an error
+                        showErrorDialog("Invalid Password", "Please provide a proper password");
+                        isChanged = false;
+                        return;
+                    }
+                    else if (oldPass.trim().length() <6){
+                        showErrorDialog("Invalid Password", "Minimum password length is 6");
+                        isChanged = false;
+                        return;
+                    } else {
+//                        auth.signInWithEmailAndPassword(currUser.getEmail(), newPass)
+//                                .then(function(user) {
+//                            user.updateEmail('newyou@domain.com')
+//                        })
+
+
+                        updateEmail(position);
+                        passwordDialog.dismiss();
+                    }
+                }
+            });
         } else if (position == 1 || position == 2){
             double value;
             try{
@@ -223,11 +265,49 @@ public class SettingsActivity extends AppCompatActivity {
                 user.setDailyWaterGoal(value);
             }
         }
-        UserManager.getDefaultManager().setUserInfo(user);
-        fieldList = new String[]{username, Double.toString(user.getWeight()) + " lbs",
-                Double.toString(user.getDailyWaterGoal()) + " oz", ""};
-        settingsList.set(position, new SettingsData(textList[position], fieldList[position]));
-        adapter.notifyDataSetChanged();
+        if (isChanged){
+            UserManager.getDefaultManager().setUserInfo(user);
+            fieldList = new String[]{username, Double.toString(user.getWeight()) + " lbs",
+                    Double.toString(user.getDailyWaterGoal()) + " oz", ""};
+            settingsList.set(position, new SettingsData(textList[position], fieldList[position]));
+            adapter.notifyDataSetChanged();
+        }
+    }
+    private boolean updateEmail(final int position){
+        final boolean[] updated = {false};
+        // Prompt the user to re-provide their sign-in credentials
+        currUser = FirebaseAuth.getInstance().getCurrentUser();
+        final String email = currUser.getEmail();
+        AuthCredential credential = EmailAuthProvider.getCredential(email, oldPass);
+
+        currUser.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()) {
+                    currUser.updateEmail(newEmail)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(getApplicationContext(), "Email address is updated. Please sign in with new email!", Toast.LENGTH_LONG).show();
+                                        updated[0] = true;
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "Failed to update email!", Toast.LENGTH_LONG).show();
+                                        updated[0] = false;
+                                    }
+                                }
+                            });
+                    updated[0] = true;
+                    user.setName(newEmail);
+                    UserManager.getDefaultManager().setUserInfo(user);
+                    fieldList = new String[]{username, Double.toString(user.getWeight()) + " lbs",
+                            Double.toString(user.getDailyWaterGoal()) + " oz", ""};
+                    settingsList.set(position, new SettingsData(textList[position], fieldList[position]));
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
+        return updated[0];
     }
     private void logOut(){
         auth.signOut();
